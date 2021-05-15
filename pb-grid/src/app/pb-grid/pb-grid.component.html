@@ -1,0 +1,59 @@
+<div class="container">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th *ngFor="let config of pbTableConfig" [hidden]="!config.showCol" class="pbGrid-th-vertical-align-top">
+          <div class="row">
+            <div class="col">
+              {{config.columnName}}
+            </div>
+          </div>
+          <div class="row" [hidden]="!config.filter">
+            <div class="col">
+              <input type="text" class="form-control form-control-sm" (keyup)="filterCalled($event.target.value,config.mappedBy,config.filterType)">
+            </div>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of pbTableData | paginate: { itemsPerPage: itemsPerPage, currentPage: p }">
+        <td *ngFor="let config of pbTableConfig" [hidden]="!config.showCol">{{data[config.mappedBy]}}</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="row">
+    <div class="col-md-4">
+      <pagination-controls (pageChange)="p = $event" autoHide="true" responsive="true" previousLabel="" nextLabel=""></pagination-controls>
+    </div>
+    <div class="col-md-2 text-right">
+      Rows Per Page :
+    </div>
+    <div class="col-md-2">
+      <select class="custom-select" (change)="numRowsChange($event.target.value)">
+        <option value="5">5</option>
+        <option value="10">10</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+        <option value="0">All</option>
+      </select>
+    </div>
+    <div class="col-md-2"></div>
+    <div class="col-md-2 text-right">
+      <div class="pbGridColumnSelectorWrapper">
+        <div class="button-group">
+          <button type="button" class="btn btn-default btn-sm" (click)="columnSelectionToggle()">
+            <span>Columns</span>
+          </button>
+        </div>
+        <div class="pbGrid-column-select text-left" #pbGridColumnSelector>
+          <div class="row" *ngFor="let col of pbTableConfig">
+            <div class="col">
+              <input type="checkbox" [(ngModel)]="col.showCol">{{col.columnName}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
